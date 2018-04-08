@@ -1,0 +1,71 @@
+
+import Business.ContextFreeGrammarTools;
+import Model.ContextFreeGrammar;
+import Model.State;
+import com.google.gson.Gson;
+
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.Set;
+
+public class Main {
+
+    public static void main(String[] args){
+        ContextFreeGrammar  epsilonProduction = new ContextFreeGrammar();
+
+        String a = "a";
+        String b = "b";
+        String c = "c";
+        String epsilon = "<epsilon>";
+
+        State S = new State();
+        State A = new State();
+        State B = new State();
+        State C = new State();
+
+
+        S.setName("S");
+        A.setName("A");
+        B.setName("B");
+        C.setName("C");
+
+        ArrayList<Object> S_Value1 = new ArrayList<Object>();
+        S_Value1.add(A);
+        S_Value1.add(B);
+        S_Value1.add(A);
+        S_Value1.add(C);
+
+        S.addObject(S_Value1);
+
+        ArrayList<Object> A_Value1 = new ArrayList<Object>();
+        A_Value1.add(a);
+        A_Value1.add(A);
+        A.addObject(A_Value1);
+        A.addObject(epsilon);
+
+        ArrayList<Object> B_Value1= new ArrayList<Object>();
+        B_Value1.add(b);
+        B_Value1.add(B);
+
+        B.addObject(B_Value1);
+        B.addObject(epsilon);
+
+
+        C.addObject(c);
+
+
+        epsilonProduction.addState(S);
+        epsilonProduction.addState(A);
+        epsilonProduction.addState(B);
+        epsilonProduction.addState(C);
+
+
+      ContextFreeGrammarTools contextFreeGrammarTools = new ContextFreeGrammarTools();
+      contextFreeGrammarTools.EliminateEpsilonProduction(epsilonProduction);
+
+        System.out.println("Hi");
+
+    }
+
+}
