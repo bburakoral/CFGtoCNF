@@ -16,8 +16,6 @@ public class ContextFreeGrammarTools {
       ContextFreeGrammar newContextFreeGrammar = new ContextFreeGrammar();
       Set<State> newstates = new HashSet<>();
 
-
-
       ArrayList<String> setOfStateWithinEpsilon =  findEpsilons(contextFreeGrammar);
 
       // States
@@ -40,10 +38,8 @@ public class ContextFreeGrammarTools {
 
                 if(value instanceof ArrayList){
                     ArrayList<Object> arrayList = (ArrayList)value;
-                    Iterator<Object> arrayListIterator = arrayList.iterator();
-
+                    newState.addObject(arrayList);
                     int i=0;
-
                     for(Iterator<Object> iterator = arrayList.iterator(); iterator.hasNext(); i++){
                         Object object = iterator.next();
 
@@ -66,12 +62,22 @@ public class ContextFreeGrammarTools {
                         }
                     }
                 }else{
+                    if(value.toString().contains("<epsilon>")){
+
+                    }else{
+                        newState.addObject(value);
+                    }
+
 
                 }
+
+                newstates.add(newState);
           }
       }
-        return  null;
 
+      newContextFreeGrammar.setStates(newstates);
+
+      return  newContextFreeGrammar;
     }
 
     public boolean checkState(ArrayList<String> arrayList, String state){
