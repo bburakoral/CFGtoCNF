@@ -152,14 +152,11 @@ public class ContextFreeGrammarTools {
 
 
     public ContextFreeGrammar EliminateUselessSymbol(ContextFreeGrammar contextFreeGrammar){
-
         ArrayList<String> setOfNongeneratingState =  findNongeneratingState(contextFreeGrammar);
-
         ContextFreeGrammar newContextFreeGrammarWithoutNonGeneratingState = EliminiateNongenerating(contextFreeGrammar,setOfNongeneratingState);
+        ContextFreeGrammar newContextFreeGrammarWithoutNonReachableState = EliminateNonreacable(newContextFreeGrammarWithoutNonGeneratingState);
 
-
-
-        return null;
+        return newContextFreeGrammarWithoutNonReachableState;
     }
 
     public ContextFreeGrammar EliminiateNongenerating(ContextFreeGrammar contextFreeGrammar,ArrayList<String> setOfNongeneratingState){
@@ -252,21 +249,61 @@ public class ContextFreeGrammarTools {
     }
 
 
-    public ContextFreeGrammar EliminateNonreacble(ContextFreeGrammar contextFreeGrammar){
-
+    public ContextFreeGrammar EliminateNonreacable(ContextFreeGrammar contextFreeGrammar){
+        ContextFreeGrammar newContextFreeGrammar = new ContextFreeGrammar();
         Set<State> states = contextFreeGrammar.getStates();
+
+        Set<State> newStates = new HashSet<>();
+
+        // TODO
+        newStates.add(states.iterator().next());
+
+
+
         Iterator<State> stateIterator = states.iterator();
 
         while (stateIterator.hasNext()){
-            State state = stateIterator.next();
 
-            
+            State state = stateIterator.next();
+            ArrayList<Object> values = state.getValues();
+
+            if(values != null){
+                Iterator<Object> valuesIterator = values.iterator();
+
+                while (valuesIterator.hasNext()){
+
+                    Object value = valuesIterator.next();
+
+                    if(value instanceof  ArrayList){
+                        ArrayList<Object> objectArrayList = (ArrayList) value;
+                        Iterator<Object> objectIterator = objectArrayList.iterator();
+                        while (objectIterator.hasNext()){
+                            Object object = objectIterator.next();
+
+                            if(object instanceof  State){
+                                State state1  = (State) object;
+
+
+
+
+                            }else{
+
+                            }
+
+                        }
+
+
+                    }
+                }
+
+            }else{
+
+            }
+
 
         }
 
-
-
-        return null;
+        return newContextFreeGrammar;
     }
 
     /**
