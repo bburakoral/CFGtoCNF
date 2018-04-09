@@ -1,31 +1,34 @@
 
 import Business.ContextFreeGrammarTools;
-import Business.EpsilonProduction;
+import Model.EpsilonProduction;
 import Business.Printer;
 import Model.ContextFreeGrammar;
-import Model.State;
-import com.google.gson.Gson;
-
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.Set;
+import Model.UselessSymbol;
 
 public class Main {
 
     public static void main(String[] args){
+
         Printer printer = new Printer();
         ContextFreeGrammar epsilonProduction = new EpsilonProduction().getEpsilonProduction();
         ContextFreeGrammarTools contextFreeGrammarTools = new ContextFreeGrammarTools();
+        ContextFreeGrammar uselessSymbol = new UselessSymbol().getContextFreeGrammar();
+
 
         System.out.println("Before  Eliminate Epsilon-Production");
         printer.printCFG(epsilonProduction);
         ContextFreeGrammar epsilonProductionResult = contextFreeGrammarTools.EliminateEpsilonProduction(epsilonProduction);
         System.out.println("\n\n");
         System.out.println("After Eliminate Epsilon-Production ");
+        printer.printCFG(epsilonProductionResult);
+        System.out.println("\n\n");
 
-         printer.printCFG(epsilonProductionResult);
+        System.out.println("Before Eliminate Useless Symbols");
+        contextFreeGrammarTools.EliminateUselessSymbol(uselessSymbol);
 
+        contextFreeGrammarTools.findNongeneratingState(uselessSymbol);
+        System.out.println("\n\n");
+        System.out.println("After Eliminate Useless Symbols");
 
 
     }

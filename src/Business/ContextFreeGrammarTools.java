@@ -47,7 +47,7 @@ public class ContextFreeGrammarTools {
                             State state1 = (State) object;
                             int stateIndex = i;
 
-                           if(checkState(setOfStateWithinEpsilon,state1.getName())){
+                           if(isStateContainEpsilon(setOfStateWithinEpsilon,state1.getName())){
                                ArrayList<Object> newValues = new ArrayList<>();
 
                                for(int j=0; j<arrayList.size(); j++){
@@ -63,11 +63,9 @@ public class ContextFreeGrammarTools {
                     }
                 }else{
                     if(value.toString().contains("<epsilon>")){
-
                     }else{
                         newState.addObject(value);
                     }
-
 
                 }
 
@@ -80,7 +78,7 @@ public class ContextFreeGrammarTools {
       return  newContextFreeGrammar;
     }
 
-    public boolean checkState(ArrayList<String> arrayList, String state){
+    public boolean isStateContainEpsilon(ArrayList<String> arrayList, String state){
         Iterator<String> stringIterator = arrayList.iterator();
         while (stringIterator.hasNext()){
             String string = stringIterator.next();
@@ -90,7 +88,6 @@ public class ContextFreeGrammarTools {
         }
         return  false;
     }
-
 
     public ArrayList<String> findEpsilons(ContextFreeGrammar contextFreeGrammar){
 
@@ -153,4 +150,161 @@ public class ContextFreeGrammarTools {
         return sefOfStateWithinEpsilon;
     }
 
+
+    public ContextFreeGrammar EliminateUselessSymbol(ContextFreeGrammar contextFreeGrammar){
+
+        ArrayList<String> setOfNongeneratingState =  findNongeneratingState(contextFreeGrammar);
+
+        ContextFreeGrammar newContextFreeGrammarWithoutNonGeneratingState = EliminiateNongenerating(contextFreeGrammar,setOfNongeneratingState);
+
+
+
+        return null;
+    }
+
+    public ContextFreeGrammar EliminiateNongenerating(ContextFreeGrammar contextFreeGrammar,ArrayList<String> setOfNongeneratingState){
+
+        ContextFreeGrammar newContextFreeGrammer = new ContextFreeGrammar();
+        Set<State> newStates = new HashSet<>();
+
+        Set<State> states = contextFreeGrammar.getStates();
+        Iterator<State> stateIterator = states.iterator();
+
+
+        // Main Loop
+        while (stateIterator.hasNext()){
+
+            // Current State
+            State state = stateIterator.next();
+
+            State newState = new State();
+            newState.setName(state.getName());
+
+            // check the current state values is null or not
+            if(state.getValues() != null) {
+
+                ArrayList<Object> values = state.getValues();
+                ArrayList<Object> newValues = new ArrayList<>();
+                Iterator<Object> valuesIterator = values.iterator();
+
+                // create a loop is not null
+                while (valuesIterator.hasNext()) {
+                  Object object = valuesIterator.next();
+
+                  // check the first value of state's values if it is ArrayList creat new loop to travers in all
+                  if(object instanceof  ArrayList){
+                      ArrayList<Object>  objectArrayList = (ArrayList) object;
+                      Iterator<Object> objectIterator = objectArrayList.iterator();
+
+                      boolean occousion = false;
+
+                      // Create a loop if it is ArrayList
+                      while (objectIterator.hasNext()){
+                          Object object1 = objectIterator.next();
+
+                          // check if it is State or a value
+                          if(object1 instanceof  State){
+
+                              // if it is state cast object to state
+                              State state1 = (State) object1;
+
+                              // check the state it is in  set of nongenerating state or no
+                              if(isStateNongenerating(setOfNongeneratingState,state1.getName())){
+                                  occousion = true;
+                              }
+
+                          }else {
+
+                              // if it is not state then it is string
+
+
+
+                          }
+                      }
+                      if(occousion != true){
+                          newValues.add(objectArrayList);
+                      }
+
+                  }else{
+
+                      if(object instanceof  State){
+
+                      }else{
+
+                      }
+                  }
+
+                }
+
+                newState.addObject(newValues);
+
+            }else{
+                newState.setValues(null);
+
+            }
+
+            newStates.add(newState);
+
+        }
+
+
+        return newContextFreeGrammer;
+    }
+
+
+    public ContextFreeGrammar EliminateNonreacble(ContextFreeGrammar contextFreeGrammar){
+
+        Set<State> states = contextFreeGrammar.getStates();
+        Iterator<State> stateIterator = states.iterator();
+
+        while (stateIterator.hasNext()){
+            State state = stateIterator.next();
+
+            
+
+        }
+
+
+
+        return null;
+    }
+
+    /**
+     *
+     * @param contextFreeGrammar given context free grammar to find  non-generating states
+     * @return  the function look for non-generating state then create a ArrayList  and return ArrayList
+     */
+    public ArrayList<String> findNongeneratingState(ContextFreeGrammar contextFreeGrammar){
+        ArrayList<String> setOfNongeneratingState = new ArrayList<>();
+        Set<State> states = contextFreeGrammar.getStates();
+        Iterator<State> stateIterator = states.iterator();
+
+        while (stateIterator.hasNext()){
+            State state = stateIterator.next();
+            ArrayList<Object> objectArrayList = state.getValues();
+            if(objectArrayList == null){
+                setOfNongeneratingState.add(state.getName());
+            }
+        }
+        return setOfNongeneratingState;
+    }
+
+
+    /**
+     *
+     * @param setOfNongeneratingState set of nongenerating state to check given state name
+     * @param state name of state
+     * @return the function check the given state name in in set of non-generating state or not if in state return true if not return false
+     */
+    public  boolean isStateNongenerating(ArrayList<String> setOfNongeneratingState , String state){
+            Iterator<String> stringIterator = setOfNongeneratingState.iterator();
+            while (stringIterator.hasNext()){
+                String string = stringIterator.next();
+
+                if(string.contains(state)){
+                    return true;
+                }
+            }
+        return false;
+    }
 }

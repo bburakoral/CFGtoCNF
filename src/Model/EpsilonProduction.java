@@ -1,4 +1,4 @@
-package Business;
+package Model;
 
 import Model.ContextFreeGrammar;
 import Model.State;
@@ -14,8 +14,8 @@ import java.util.ArrayList;
         C-> c
 */
 
-public class EpsilonProduction {
-    ContextFreeGrammar epsilonProduction;
+public class   EpsilonProduction {
+   private   ContextFreeGrammar epsilonProduction;
 
     public EpsilonProduction() {
        epsilonProduction = new ContextFreeGrammar();
