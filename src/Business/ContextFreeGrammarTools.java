@@ -11,61 +11,201 @@ import java.util.Set;
 public class ContextFreeGrammarTools {
 
 
+    /**
+     *
+     * @param contextFreeGrammar
+     * @return
+     */
     public ContextFreeGrammar EliminateEpsilonProduction(ContextFreeGrammar contextFreeGrammar){
 
+       // it is new context free grammar it will return as a result after eliminate epsilon
       ContextFreeGrammar newContextFreeGrammar = new ContextFreeGrammar();
+
+      // it is for collect new states
       Set<State> newstates = new HashSet<>();
 
+      // the set  of name of state with epsilon
       ArrayList<String> setOfStateWithinEpsilon =  findEpsilons(contextFreeGrammar);
 
-      // States
+      // given states
       Set<State> states =  contextFreeGrammar.getStates();
+
+      // the iterator for given states
       Iterator<State> stateIterator = states.iterator();
+
 
       while (stateIterator.hasNext()){
 
-          // Current State
+          //current state
           State state = stateIterator.next();
 
+
+          //I have created new state because I do not want to change anything in old
+          // context free grammar I will use it below
           State newState = new State();
+
+          //setting name of new state with name of the current state
           newState.setName(state.getName());
 
+          // get all values of the current state;
           ArrayList<Object> values = state.getValues();
+
+          /* this is an object iterator for  values of state
+           the iterator object because  values can store
+           ArrayList, String or Object so we do not know
+           type of the value
+          */
           Iterator<Object> valuesIterator = values.iterator();
 
           while (valuesIterator.hasNext()){
+
+                // This is the current value of the state
                 Object value = valuesIterator.next();
 
+                // first check if values is arrayList
                 if(value instanceof ArrayList){
+
+                    //  S->ABAC
+                    //  S->ABC
+                    //  S->BAC
+                    //  S->AAC
+                    //  S->AC
+                    //  S->BC
+                    //  S->AC
+                    //  S->C
+
+
+                    // if value is a arrayList cast the value to ArrayList
                     ArrayList<Object> arrayList = (ArrayList)value;
+
+                    // Add first the whole value of the value
                     newState.addObject(arrayList);
-                    int i=0;
-                    for(Iterator<Object> iterator = arrayList.iterator(); iterator.hasNext(); i++){
-                        Object object = iterator.next();
 
-                        if(object instanceof  State){
-                            State state1 = (State) object;
-                            int stateIndex = i;
 
-                           if(isStateContainEpsilon(setOfStateWithinEpsilon,state1.getName())){
-                               ArrayList<Object> newValues = new ArrayList<>();
+                        // This is for keep index of the state that contain epsilon
+                        ArrayList<Integer> index = new ArrayList<>();
 
-                               for(int j=0; j<arrayList.size(); j++){
-                                   Object object1 = arrayList.get(j);
-                                   if(j==stateIndex){
-                                   }else{
-                                       newValues.add(object1);
-                                   }
-                               }
-                               newState.addObject(newValues);
-                           }
+                        // iterator counter for fallow index
+                        int i=0;
+                        for(Iterator<Object> iterator = arrayList.iterator(); iterator.hasNext(); i++){
+
+                            /* current element of the arrayList as object because
+                             *  arrayList can store State and String */
+
+                            Object object = iterator.next();
+
+                            // check element if it is state or string
+                            if(object instanceof  State){
+
+                                // if it is state  cast object to state
+                                State state1 = (State) object;
+
+                                // check current state is contain epsilon or not
+                                if(isStateContainEpsilon(setOfStateWithinEpsilon,state1.getName())){
+
+                                    // if it contain epsilon put its index in arrayList to store
+                                    index.add(i);
+
+                                    // the new ArrayList to keep new values
+                                    ArrayList<Object> newValues = new ArrayList<>();
+
+
+                                    for(int j=0; j<arrayList.size(); j++){
+
+                                        // current values
+                                        Object object1 = arrayList.get(j);
+                                        // check if current index equal current state index  ignore it
+                                        if(j==i){
+                                        }else{
+                                            newValues.add(object1);
+                                        }
+                                    }
+
+                                    // after creating new values put it new state's set of value
+                                    newState.addObject(newValues);
+                                }
+
+                            }else{
+
+
+                            }
+                        }
+
+
+
+                        if(index.size()>1){
+                            for(int k=0; k<index.size(); k++ ){
+                                ArrayList<Object> newValues2 = new ArrayList<>();
+
+
+                                for(int t =0; t<arrayList.size(); t++){
+
+                                    Object object2 = arrayList.get(t);
+
+                                    if(isInEpsilonIndexSet(index,t) && t == k){
+                                        newValues2.add(object2);
+                                    }else if(!isInEpsilonIndexSet(index,t)){
+                                        newValues2.add(object2);
+                                    }
+                                }
+
+                                newState.addObject(newValues2);
+
+                            }
+
+                            ArrayList<Object> newValues3 = new ArrayList<>();
+
+                            for(int l=0; l<arrayList.size(); l++){
+                                Object object3 = arrayList.get(l);
+                                if(isInEpsilonIndexSet(index,l)){
+                                }else if(!isInEpsilonIndexSet(index,l)){
+                                    newValues3.add(object3);
+                                }
+                            }
+                            newState.addObject(newValues3);
+                        }
+
+
+
+
+
+
+
+
+
+
+
+
+                }// end of the arrayList of Val
+                else{
+
+                    // if it is not check it is State or  String
+                    if(value instanceof  State){
+                        /*
+                        if it is not arrayList and it is state
+                        as one value I just add it the new values as a
+                        value
+                         */
+                        State  stateAsValue = (State) value;
+                        newState.addObject(stateAsValue);
+
+                    }else{
+
+                        // if it is string and it is not contain epsilon add it to
+                        String valuesAsString = value.toString();
+
+                        if(!values.contains("<epsilon>")){
+                            newState.addObject(value);
                         }
                     }
-                }else{
-                    if(value.toString().contains("<epsilon>")){
-                    }else{
-                        newState.addObject(value);
-                    }
+
+
+
+                }
+
+
+                for(int i =0; i<newState.getValues().size(); i++){
+
 
                 }
 
@@ -73,9 +213,29 @@ public class ContextFreeGrammarTools {
           }
       }
 
-      newContextFreeGrammar.setStates(newstates);
+
+
+
+
+                newContextFreeGrammar.setStates(newstates);
+
+
 
       return  newContextFreeGrammar;
+    }
+
+
+    public boolean isInEpsilonIndexSet(ArrayList<Integer> indexes, int index){
+        Iterator<Integer> object = indexes.iterator();
+
+        while (object.hasNext()){
+            int i = object.next();
+            if(i==index){
+                return true;
+            }
+        }
+
+        return  false;
     }
 
     public boolean isStateContainEpsilon(ArrayList<String> arrayList, String state){
