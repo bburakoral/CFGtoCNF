@@ -16,6 +16,7 @@ public class ContextFreeGrammarTools {
      * @param contextFreeGrammar
      * @return
      */
+
     public ContextFreeGrammar EliminateEpsilonProduction(ContextFreeGrammar contextFreeGrammar){
 
        // it is new context free grammar it will return as a result after eliminate epsilon
@@ -132,11 +133,9 @@ public class ContextFreeGrammarTools {
                         }
 
 
-
                         if(index.size()>1){
                             for(int k=0; k<index.size(); k++ ){
                                 ArrayList<Object> newValues2 = new ArrayList<>();
-
 
                                 for(int t =0; t<arrayList.size(); t++){
 
@@ -166,16 +165,6 @@ public class ContextFreeGrammarTools {
                         }
 
 
-
-
-
-
-
-
-
-
-
-
                 }// end of the arrayList of Val
                 else{
 
@@ -199,23 +188,11 @@ public class ContextFreeGrammarTools {
                         }
                     }
 
-
-
-                }
-
-
-                for(int i =0; i<newState.getValues().size(); i++){
-
-
                 }
 
                 newstates.add(newState);
           }
       }
-
-
-
-
 
                 newContextFreeGrammar.setStates(newstates);
 
@@ -223,7 +200,6 @@ public class ContextFreeGrammarTools {
 
       return  newContextFreeGrammar;
     }
-
 
     public boolean isInEpsilonIndexSet(ArrayList<Integer> indexes, int index){
         Iterator<Integer> object = indexes.iterator();

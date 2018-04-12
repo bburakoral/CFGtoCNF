@@ -18,13 +18,17 @@ public class Main {
         System.out.println("Before  Eliminate Epsilon-Production");
         printer.printCFG(epsilonProduction);
         ContextFreeGrammar epsilonProductionResult = contextFreeGrammarTools.EliminateEpsilonProduction(epsilonProduction);
-        System.out.println("\n\n");
+
+        System.out.println("\n");
         System.out.println("After Eliminate Epsilon-Production ");
         printer.printCFG(epsilonProductionResult);
-        System.out.println("\n\n");
 
+
+
+        System.out.println("\n");
         System.out.println("Before Eliminate Useless Symbols");
-//        contextFreeGrammarTools.EliminateUselessSymbol(uselessSymbol);
+    //  contextFreeGrammarTools.EliminateUselessSymbol(uselessSymbol);
+
 
        // contextFreeGrammarTools.findNongeneratingState(uselessSymbol);
         System.out.println("\n\n");
