@@ -3,7 +3,9 @@ package Model;
 import java.util.ArrayList;
 
 public class State  {
+
     private String name;
+
     ArrayList<Object> values;
 
     public State() {

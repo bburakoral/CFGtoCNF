@@ -3,10 +3,7 @@ package Business;
 import Model.ContextFreeGrammar;
 import Model.State;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.Set;
+import java.util.*;
 
 public class ContextFreeGrammarTools {
 
@@ -77,7 +74,7 @@ public class ContextFreeGrammarTools {
 
 
                     // if value is a arrayList cast the value to ArrayList
-                    ArrayList<Object> arrayList = (ArrayList)value;
+                    ArrayList<Object> arrayList = (ArrayList<Object>)value;
 
                     // Add first the whole value of the value
                     newState.addObject(arrayList);
@@ -286,21 +283,24 @@ public class ContextFreeGrammarTools {
         return sefOfStateWithinEpsilon;
     }
 
-
     public ContextFreeGrammar EliminateUselessSymbol(ContextFreeGrammar contextFreeGrammar){
         ArrayList<String> setOfNongeneratingState =  findNongeneratingState(contextFreeGrammar);
         ContextFreeGrammar newContextFreeGrammarWithoutNonGeneratingState = EliminiateNongenerating(contextFreeGrammar,setOfNongeneratingState);
         ContextFreeGrammar newContextFreeGrammarWithoutNonReachableState = EliminateNonreacable(newContextFreeGrammarWithoutNonGeneratingState);
-
         return newContextFreeGrammarWithoutNonReachableState;
     }
 
     public ContextFreeGrammar EliminiateNongenerating(ContextFreeGrammar contextFreeGrammar,ArrayList<String> setOfNongeneratingState){
 
-        ContextFreeGrammar newContextFreeGrammer = new ContextFreeGrammar();
+        // this will be my result context free grammar as result
+        ContextFreeGrammar newContextFreeGrammar = new ContextFreeGrammar();
+
         Set<State> newStates = new HashSet<>();
 
+        // This is states of the context free grammar
         Set<State> states = contextFreeGrammar.getStates();
+
+        // this is for iterate  in set of state
         Iterator<State> stateIterator = states.iterator();
 
 
@@ -310,29 +310,48 @@ public class ContextFreeGrammarTools {
             // Current State
             State state = stateIterator.next();
 
-            State newState = new State();
-            newState.setName(state.getName());
+
+
 
             // check the current state values is null or not
             if(state.getValues() != null) {
 
+                // to create new state
+                State newState = new State();
+                newState.setName(state.getName());
+
+                // Get all values of the state
                 ArrayList<Object> values = state.getValues();
+
+                // create new ArrayList to  keep all of the new values of state
                 ArrayList<Object> newValues = new ArrayList<>();
+
+                // this if for iterate in set of values
                 Iterator<Object> valuesIterator = values.iterator();
 
                 // create a loop is not null
                 while (valuesIterator.hasNext()) {
+
+                  // this is current value of the state
                   Object object = valuesIterator.next();
+
 
                   // check the first value of state's values if it is ArrayList creat new loop to travers in all
                   if(object instanceof  ArrayList){
-                      ArrayList<Object>  objectArrayList = (ArrayList) object;
+
+                      // casting element of the values to arrayList
+                      ArrayList<Object>  objectArrayList = (ArrayList<Object>) object;
+
+                      // this  for iterate in value of the state if it is arrayList
                       Iterator<Object> objectIterator = objectArrayList.iterator();
 
+                      // it will give to me a change to fallow is there any value in state that is non-generating
                       boolean occousion = false;
 
                       // Create a loop if it is ArrayList
                       while (objectIterator.hasNext()){
+
+                          // element of the  values
                           Object object1 = objectIterator.next();
 
                           // check if it is State or a value
@@ -349,20 +368,28 @@ public class ContextFreeGrammarTools {
                           }else {
 
                               // if it is not state then it is string
-
-
-
                           }
                       }
-                      if(occousion != true){
+
+                      if(!occousion){
                           newValues.add(objectArrayList);
                       }
 
                   }else{
 
                       if(object instanceof  State){
+                          // if it is state cast object to state
+                          State state2 = (State) object;
+                          if(isStateNongenerating(setOfNongeneratingState,state2.getName())){
+
+                          }else{
+                              newValues.add(object);
+                          }
 
                       }else{
+
+
+                          newValues.add(object);
 
                       }
                   }
@@ -371,75 +398,122 @@ public class ContextFreeGrammarTools {
 
                 newState.addObject(newValues);
 
+
+                newStates.add(newState);
             }else{
-                newState.setValues(null);
+
 
             }
 
-            newStates.add(newState);
+
 
         }
 
+        newContextFreeGrammar.setStates(newStates);
 
-        return newContextFreeGrammer;
+        return newContextFreeGrammar;
     }
 
 
     public ContextFreeGrammar EliminateNonreacable(ContextFreeGrammar contextFreeGrammar){
+
+        // it is for keep new state and return as a result
         ContextFreeGrammar newContextFreeGrammar = new ContextFreeGrammar();
+
+        // get all states in context free grammar
         Set<State> states = contextFreeGrammar.getStates();
 
+        // it is for keep new  state to add new grammar
         Set<State> newStates = new HashSet<>();
 
-        // TODO
-        newStates.add(states.iterator().next());
+        // to keep which state call other state
+
+        HashMap<String,Boolean>  reachables= new HashMap<>();
+        Iterator<State> stateIterator1 = states.iterator();
+
+        while(stateIterator1.hasNext()){
+            State state = stateIterator1.next();
+            reachables.put(state.getName(),false);
+        }
+
+        /*
+            S->true;
+            A->false;
+            B->false;
+            X->false;
+         */
+
+        reachables.put("S",true);
+
+        for(int i=0; i<states.size(); i++) {
 
 
+            Iterator<State> stateIterator = states.iterator();
 
-        Iterator<State> stateIterator = states.iterator();
+            while (stateIterator.hasNext()) {
 
-        while (stateIterator.hasNext()){
+                //  current State
+                State state = stateIterator.next();
 
-            State state = stateIterator.next();
-            ArrayList<Object> values = state.getValues();
+                if(isReachable(reachables,state.getName())){
 
-            if(values != null){
-                Iterator<Object> valuesIterator = values.iterator();
+                    // values of the current States
+                    ArrayList<Object> values = state.getValues();
 
-                while (valuesIterator.hasNext()){
+                    Iterator<Object> valuesIterator = values.iterator();
 
-                    Object value = valuesIterator.next();
+                    while (valuesIterator.hasNext()) {
+                        // Current value of the values
+                        Object value = valuesIterator.next();
 
-                    if(value instanceof  ArrayList){
-                        ArrayList<Object> objectArrayList = (ArrayList) value;
-                        Iterator<Object> objectIterator = objectArrayList.iterator();
-                        while (objectIterator.hasNext()){
-                            Object object = objectIterator.next();
+                        // check if it is arrayList or not
+                        if (value instanceof ArrayList) {
 
-                            if(object instanceof  State){
-                                State state1  = (State) object;
+                            // value as a arrayList
+                            ArrayList<Object> listOfValue = (ArrayList<Object>)value;
+                            Iterator<Object> listOfValueIterator = listOfValue.iterator();
+                            while (listOfValueIterator.hasNext()) {
 
+                                Object elementOfValue = listOfValueIterator.next();
 
+                                if (elementOfValue instanceof State) {
+                                    State state1 = (State) elementOfValue;
+                                    reachables.replace(state1.getName(),true);
+                                }
 
-
-                            }else{
 
                             }
 
+                        } else {
+                            if (value instanceof State) {
+                                reachables.put(((State) value).getName(),true);
+                            }
                         }
-
-
                     }
                 }
-
-            }else{
-
             }
-
-
         }
 
+
+
+
+
+
+
+
+
+
+        newContextFreeGrammar.setStates(newStates);
         return newContextFreeGrammar;
+    }
+
+    public boolean isReachable(HashMap<String,Boolean> hashMap, String stateName){
+
+           if(hashMap.get(stateName)){
+               return true;
+           }else{
+               return false;
+           }
     }
 
     /**
@@ -448,6 +522,7 @@ public class ContextFreeGrammarTools {
      * @return  the function look for non-generating state then create a ArrayList  and return ArrayList
      */
     public ArrayList<String> findNongeneratingState(ContextFreeGrammar contextFreeGrammar){
+
         ArrayList<String> setOfNongeneratingState = new ArrayList<>();
         Set<State> states = contextFreeGrammar.getStates();
         Iterator<State> stateIterator = states.iterator();

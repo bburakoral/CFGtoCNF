@@ -27,10 +27,10 @@ public class Main {
 
         System.out.println("\n");
         System.out.println("Before Eliminate Useless Symbols");
-    //  contextFreeGrammarTools.EliminateUselessSymbol(uselessSymbol);
+        contextFreeGrammarTools.EliminateUselessSymbol(uselessSymbol);
 
 
-       // contextFreeGrammarTools.findNongeneratingState(uselessSymbol);
+        contextFreeGrammarTools.findNongeneratingState(uselessSymbol);
         System.out.println("\n\n");
         System.out.println("After Eliminate Useless Symbols");
 

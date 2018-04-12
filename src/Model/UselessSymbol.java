@@ -33,7 +33,7 @@ public class UselessSymbol {
         State B = new State();
         State X = new State();
         State D = new State();
-        D.setValues(null);
+
 
 
         D.setName("D");
@@ -42,20 +42,20 @@ public class UselessSymbol {
         B.setName("B");
         X.setName("X");
 
-        ArrayList<Object> S_Value1 = new ArrayList<>();
+        ArrayList<Object> S_Value1 = new ArrayList<Object>();
         S_Value1.add(a);
         S_Value1.add(B);
 
         S.addObject(S_Value1);
 
-        ArrayList<Object> S_Value2 = new ArrayList<>();
+        ArrayList<Object> S_Value2 = new ArrayList<Object>();
         S_Value2.add(b);
         S_Value2.add(X);
 
         S.addObject(S_Value2);
 
 
-        ArrayList<Object> A_Value1 = new ArrayList<>();
+        ArrayList<Object> A_Value1 = new ArrayList<Object>();
         A_Value1.add(B);
         A_Value1.add(a);
         A_Value1.add(d);
@@ -63,7 +63,7 @@ public class UselessSymbol {
         A.addObject(A_Value1);
 
 
-        ArrayList<Object> A_Value2 = new ArrayList<>();
+        ArrayList<Object> A_Value2 = new ArrayList<Object>();
         A_Value2.add(b);
         A_Value2.add(S);
         A_Value2.add(X);
@@ -72,38 +72,39 @@ public class UselessSymbol {
         A.addObject(a);
 
 
-        ArrayList<Object> B_Value1 = new ArrayList<>();
+        ArrayList<Object> B_Value1 = new ArrayList<Object>();
         B_Value1.add(a);
         B_Value1.add(S);
         B_Value1.add(B);
         B.addObject(B_Value1);
 
 
-        ArrayList<Object> B_Value2 = new ArrayList<>();
+        ArrayList<Object> B_Value2 = new ArrayList<Object>();
         B_Value2.add(b);
         B_Value2.add(B);
         B_Value2.add(X);
         B.addObject(B_Value2);
 
 
-        ArrayList<Object> X_Value1 = new ArrayList<>();
+        ArrayList<Object> X_Value1 = new ArrayList<Object>();
         X_Value1.add(S);
         X_Value1.add(B);
         X_Value1.add(D);
         X.addObject(X_Value1);
 
 
-        ArrayList<Object> X_Value2 = new ArrayList<>();
+        ArrayList<Object> X_Value2 = new ArrayList<Object>();
         X_Value2.add(a);
         X_Value2.add(B);
         X_Value2.add(X);
         X.addObject(X_Value2);
 
-        ArrayList<Object> X_Value3= new ArrayList<>();
+        ArrayList<Object> X_Value3= new ArrayList<Object>();
         X_Value3.add(a);
         X_Value3.add(d);
         X.addObject(X_Value3);
 
+        D.setValues(null);
 
         contextFreeGrammar.addState(S);
         contextFreeGrammar.addState(A);

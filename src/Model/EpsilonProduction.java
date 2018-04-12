@@ -18,6 +18,7 @@ public class   EpsilonProduction {
    private   ContextFreeGrammar epsilonProduction;
 
     public EpsilonProduction() {
+
        epsilonProduction = new ContextFreeGrammar();
 
         String a = "a";
