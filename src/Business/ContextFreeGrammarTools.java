@@ -14,7 +14,7 @@ public class ContextFreeGrammarTools {
      * @return
      */
 
-    public ContextFreeGrammar EliminateEpsilonProduction(ContextFreeGrammar contextFreeGrammar){
+    public ContextFreeGrammar eliminateEpsilonProduction(ContextFreeGrammar contextFreeGrammar){
 
        // it is new context free grammar it will return as a result after eliminate epsilon
       ContextFreeGrammar newContextFreeGrammar = new ContextFreeGrammar();
@@ -283,14 +283,14 @@ public class ContextFreeGrammarTools {
         return sefOfStateWithinEpsilon;
     }
 
-    public ContextFreeGrammar EliminateUselessSymbol(ContextFreeGrammar contextFreeGrammar){
-        ArrayList<String> setOfNongeneratingState =  findNongeneratingState(contextFreeGrammar);
-        ContextFreeGrammar newContextFreeGrammarWithoutNonGeneratingState = EliminiateNongenerating(contextFreeGrammar,setOfNongeneratingState);
-        ContextFreeGrammar newContextFreeGrammarWithoutNonReachableState = EliminateNonreacable(newContextFreeGrammarWithoutNonGeneratingState);
+    public ContextFreeGrammar eliminateUselessSymbol(ContextFreeGrammar contextFreeGrammar){
+        ArrayList<String> setOfNongeneratingState =  findNonGeneratingStates(contextFreeGrammar);
+        ContextFreeGrammar newContextFreeGrammarWithoutNonGeneratingState = eliminateNonGenerating(contextFreeGrammar,setOfNongeneratingState);
+        ContextFreeGrammar newContextFreeGrammarWithoutNonReachableState = eliminateNonReachable(newContextFreeGrammarWithoutNonGeneratingState);
         return newContextFreeGrammarWithoutNonReachableState;
     }
 
-    public ContextFreeGrammar EliminiateNongenerating(ContextFreeGrammar contextFreeGrammar,ArrayList<String> setOfNongeneratingState){
+    public ContextFreeGrammar eliminateNonGenerating(ContextFreeGrammar contextFreeGrammar, ArrayList<String> setOfNongeneratingState){
 
         // this will be my result context free grammar as result
         ContextFreeGrammar newContextFreeGrammar = new ContextFreeGrammar();
@@ -361,7 +361,7 @@ public class ContextFreeGrammarTools {
                               State state1 = (State) object1;
 
                               // check the state it is in  set of nongenerating state or no
-                              if(isStateNongenerating(setOfNongeneratingState,state1.getName())){
+                              if(isStateNonGenerating(setOfNongeneratingState,state1.getName())){
                                   occousion = true;
                               }
 
@@ -380,7 +380,7 @@ public class ContextFreeGrammarTools {
                       if(object instanceof  State){
                           // if it is state cast object to state
                           State state2 = (State) object;
-                          if(isStateNongenerating(setOfNongeneratingState,state2.getName())){
+                          if(isStateNonGenerating(setOfNongeneratingState,state2.getName())){
 
                           }else{
                               newValues.add(object);
@@ -414,7 +414,7 @@ public class ContextFreeGrammarTools {
         return newContextFreeGrammar;
     }
 
-    public ContextFreeGrammar EliminateNonreacable(ContextFreeGrammar contextFreeGrammar){
+    public ContextFreeGrammar eliminateNonReachable(ContextFreeGrammar contextFreeGrammar){
 
         // it is for keep new state and return as a result
         ContextFreeGrammar newContextFreeGrammar = new ContextFreeGrammar();
@@ -524,7 +524,7 @@ public class ContextFreeGrammarTools {
      * @param contextFreeGrammar given context free grammar to find  non-generating states
      * @return  the function look for non-generating state then create a ArrayList  and return ArrayList
      */
-    public ArrayList<String> findNongeneratingState(ContextFreeGrammar contextFreeGrammar){
+    public ArrayList<String> findNonGeneratingStates(ContextFreeGrammar contextFreeGrammar){
 
         ArrayList<String> setOfNongeneratingState = new ArrayList<>();
         Set<State> states = contextFreeGrammar.getStates();
@@ -540,14 +540,13 @@ public class ContextFreeGrammarTools {
         return setOfNongeneratingState;
     }
 
-
     /**
      *
      * @param setOfNongeneratingState set of nongenerating state to check given state name
      * @param state name of state
      * @return the function check the given state name in in set of non-generating state or not if in state return true if not return false
      */
-    public  boolean isStateNongenerating(ArrayList<String> setOfNongeneratingState , String state){
+    public  boolean isStateNonGenerating(ArrayList<String> setOfNongeneratingState , String state){
             Iterator<String> stringIterator = setOfNongeneratingState.iterator();
             while (stringIterator.hasNext()){
                 String string = stringIterator.next();
@@ -558,4 +557,23 @@ public class ContextFreeGrammarTools {
             }
         return false;
     }
+
+    public ContextFreeGrammar eliminateUnitProduction(ContextFreeGrammar contextFreeGrammar){
+            /*
+                The Algorithm
+                
+                Step 1: To remove A->B, add production A->X to the grammar rule whenever B->X occurs in the grammar.
+                Step 2: Delete A->B from the grammar
+                Step 3: Repeat from step 1 until all Unit Productions are removed.
+
+             */
+
+
+
+            Set<State> states = contextFreeGrammar.getStates();
+
+
+        return null;
+    }
+
 }

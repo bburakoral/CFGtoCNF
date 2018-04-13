@@ -19,7 +19,7 @@ public class Main {
 
         System.out.println("Before  Eliminate Epsilon-Production");
         printer.printCFG(epsilonProduction);
-        ContextFreeGrammar epsilonProductionResult = contextFreeGrammarTools.EliminateEpsilonProduction(epsilonProduction);
+        ContextFreeGrammar epsilonProductionResult = contextFreeGrammarTools.eliminateEpsilonProduction(epsilonProduction);
 
         System.out.println("\n");
         System.out.println("After Eliminate Epsilon-Production ");
@@ -33,14 +33,15 @@ public class Main {
 
         System.out.println("\n");
         System.out.println("After Eliminate Unite Production");
-        printer.printCFG(unitProduction);
+        ContextFreeGrammar unitProductionResult = contextFreeGrammarTools.eliminateUnitProduction(unitProduction);
+        printer.printCFG(unitProductionResult);
 
 
         System.out.println("\n");
         System.out.println("Before Eliminate Useless Symbols");
         printer.printCFG(uselessSymbol);
 
-       ContextFreeGrammar uselessSymbolResult = contextFreeGrammarTools.EliminateUselessSymbol(uselessSymbol);
+       ContextFreeGrammar uselessSymbolResult = contextFreeGrammarTools.eliminateUselessSymbol(uselessSymbol);
         System.out.println("\n\n");
         System.out.println("After Eliminate Useless Symbols");
         printer.printCFG(uselessSymbolResult);
