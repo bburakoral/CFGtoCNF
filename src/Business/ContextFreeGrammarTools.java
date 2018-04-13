@@ -396,7 +396,7 @@ public class ContextFreeGrammarTools {
 
                 }
 
-                newState.addObject(newValues);
+                newState.setValues(newValues);
 
 
                 newStates.add(newState);
@@ -414,7 +414,6 @@ public class ContextFreeGrammarTools {
         return newContextFreeGrammar;
     }
 
-
     public ContextFreeGrammar EliminateNonreacable(ContextFreeGrammar contextFreeGrammar){
 
         // it is for keep new state and return as a result
@@ -428,7 +427,7 @@ public class ContextFreeGrammarTools {
 
         // to keep which state call other state
 
-        HashMap<String,Boolean>  reachables= new HashMap<>();
+        HashMap<String,Boolean> reachables= new HashMap<>();
         Iterator<State> stateIterator1 = states.iterator();
 
         while(stateIterator1.hasNext()){
@@ -497,11 +496,15 @@ public class ContextFreeGrammarTools {
 
 
 
+        Iterator<State> stateIterator = states.iterator();
 
+        while (stateIterator.hasNext()){
+            State  state = stateIterator.next();
 
-
-
-
+            if(reachables.get(state.getName())){
+                newStates.add(state);
+            }
+        }
 
         newContextFreeGrammar.setStates(newStates);
         return newContextFreeGrammar;
