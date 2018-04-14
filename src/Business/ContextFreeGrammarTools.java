@@ -2,7 +2,6 @@ package Business;
 
 import Model.ContextFreeGrammar;
 import Model.State;
-import com.sun.corba.se.spi.ior.IORTemplate;
 
 import java.util.*;
 
@@ -569,136 +568,46 @@ public class ContextFreeGrammarTools {
 
              */
 
+          Set<State> states = contextFreeGrammar.getStates();
+
+          for(int i=0; i<states.size(); i++){
+              for(State state:states){
+
+                  ArrayList<Object> valuesOfState = state.getValues();
+                  ArrayList<Object> newValues = new ArrayList<Object>();
+
+                  for(Object value : valuesOfState){
+
+                      if(value instanceof  State){
+
+                          for(State state1:states){
+                              if(state1.getName().equals(((State) value).getName())){
+                                  ArrayList<Object> valuesOfValueState = state1.getValues();
+
+                                  for(Object subValue : valuesOfValueState){
+
+                                      newValues.add(subValue);
+                                  }
+                              }
+                          }
+                      }else{
+
+                          newValues.add(value);
+                      }
+                  }
+
+                  state.setValues(newValues);
+
+              }
+          }
+
+          contextFreeGrammar.setStates(states);
+
+          ContextFreeGrammar resultOfUnReacble = eliminateNonReachable(contextFreeGrammar);
 
 
-            HashMap<String,LinkedList<String>> uniteProductions  = findUnitProductions(contextFreeGrammar);
 
-            Set<State> states = contextFreeGrammar.getStates();
-            Set<State> states1 = new HashSet<>();
-
-            for(State state: states){
-                State newState = new State();
-                newState.setName(state.getName());
-
-                ArrayList<Object> objectArrayList = new ArrayList<Object>();
-
-                Iterator<Object> objectIterator = state.getValues().iterator();
-                while (objectIterator.hasNext()){
-
-                    Object object = objectIterator.next();
-                    objectArrayList.add(object);
-                }
-                newState.setValues(objectArrayList);
-                states1.add(newState);
-            }
-
-
-        for (State state : states) {
-            // Current State
-            // Value of the current state
-            ArrayList<Object> valuesOfState = state.getValues();
-
-            for (Object object : valuesOfState) {
-
-                if (object instanceof State) {
-
-                    State currentStateAsValue = (State) object;
-
-                    ArrayList<Object> values = valuesOfState(states, currentStateAsValue.getName());
-
-                    for (Object object1 : values) {
-                        states1 =  addElementToState(states1, object1, state.getName());
-
-
-                    }
-                }
-            }
-        }
-
-
-        return null;
+        return resultOfUnReacble;
     }
-
-
-    public Set<State> addElementToState(Set<State> states, Object object, String stateName){
-
-        Iterator<State> stateIterator = states.iterator();
-        Set<State> newStates = new HashSet<>();
-        while (stateIterator.hasNext()){
-            State state = stateIterator.next();
-            if(state.getName().equals(stateName)){
-                state.addObject(object);
-            }
-            newStates.add(state);
-        }
-
-
-        return newStates;
-    }
-
-
-
-
-    public ArrayList<Object> valuesOfState (Set<State> states , String stateName){
-
-        Iterator<State> stateIterator = states.iterator();
-        while (stateIterator.hasNext()){
-            State state = stateIterator.next();
-            if(state.getName().equals(stateName)){
-                return  state.getValues();
-            }
-        }
-        return null;
-    }
-
-    public HashMap<String,LinkedList<String>> findUnitProductions (ContextFreeGrammar contextFreeGrammar){
-        HashMap<String,LinkedList<String>> uniteProductions = new HashMap<>();
-
-        Set<State> states = contextFreeGrammar.getStates();
-        Iterator<State > stateIterator = states.iterator();
-
-        while (stateIterator.hasNext()){
-            State state = stateIterator.next();
-            uniteProductions.put(state.getName(),new LinkedList<String>());
-        }
-
-
-        Iterator<State> stateIterator1 = states.iterator();
-
-        while (stateIterator1.hasNext()){
-            State state = stateIterator1.next();
-            ArrayList<Object> objectArrayList = state.getValues();
-            Iterator<Object> objectIterator = objectArrayList.iterator();
-
-            while (objectIterator.hasNext()){
-                Object object  = objectIterator.next();
-
-                if(object instanceof  State){
-                    uniteProductions.get(state.getName()).add(((State) object).getName());
-                }
-            }
-        }
-
-
-        return  uniteProductions;
-
-    }
-
-    public boolean isUnitProduction(HashMap<String, LinkedList<String>> unitProductions, String state1, String state2){
-
-        LinkedList<String> strings = unitProductions.get(state1);
-        Iterator<String> stringIterator = strings.iterator();
-
-        while (stringIterator.hasNext()){
-            String string = stringIterator.next();
-
-            if(string.equals(state2)){
-                return  true;
-            }
-        }
-
-        return false;
-    }
-
 
 }
