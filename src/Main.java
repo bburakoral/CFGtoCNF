@@ -1,10 +1,7 @@
 
 import Business.ContextFreeGrammarTools;
-import Model.EpsilonProduction;
+import Model.*;
 import Business.Printer;
-import Model.ContextFreeGrammar;
-import Model.UniteProduction;
-import Model.UselessSymbol;
 
 public class Main {
 
@@ -47,6 +44,16 @@ public class Main {
         printer.printCFG(uselessSymbolResult);
 
 
+        ContextFreeGrammar CFGtoCNF = new CFGtoCNF().getContextFreeGrammar();
+
+        System.out.println("\n");
+        System.out.println("Before Convert CFG to CNF");
+        printer.printCFG(CFGtoCNF);
+
+        System.out.println("\n");
+        System.out.println("After Convert CFG to CNF");
+        ContextFreeGrammar resultOfConverter = contextFreeGrammarTools.CFGtoCNF(CFGtoCNF);
+        printer.printCFG(resultOfConverter);
 
 
 

@@ -610,4 +610,30 @@ public class ContextFreeGrammarTools {
         return resultOfUnReacble;
     }
 
+    public ContextFreeGrammar CFGtoCNF(ContextFreeGrammar contextFreeGrammar){
+
+        ContextFreeGrammar resultOfEpsilonProduction = eliminateEpsilonProduction(contextFreeGrammar);
+        ContextFreeGrammar resultOfUnitProduction = eliminateUnitProduction(resultOfEpsilonProduction);
+        ContextFreeGrammar resulOfUselesSyembols = eliminateUselessSymbol(resultOfUnitProduction);
+
+        Set<State> states = resulOfUselesSyembols.getStates();
+
+        for(State state : states){
+            ArrayList<Object> values = state.getValues();
+
+            for(Object value: values){
+                if(value instanceof ArrayList){
+                    ArrayList<Object> listOfValue = (ArrayList<Object>) value;
+
+                    for(Object object: listOfValue){
+
+                    }
+                }
+            }
+
+        }
+
+
+        return resulOfUselesSyembols;
+    }
 }
