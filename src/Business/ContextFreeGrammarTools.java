@@ -618,21 +618,178 @@ public class ContextFreeGrammarTools {
 
         Set<State> states = resulOfUselesSyembols.getStates();
 
+        Set<State> newStates = new HashSet<>();
+
+        for(State state: states){
+            State state1  = new State();
+            state1.setName(state.getName());
+            newStates.add(state1);
+        }
+
+
+        int i=1;
+
         for(State state : states){
             ArrayList<Object> values = state.getValues();
 
+            ArrayList<Object> newValues = new ArrayList<>();
+
             for(Object value: values){
+
                 if(value instanceof ArrayList){
                     ArrayList<Object> listOfValue = (ArrayList<Object>) value;
+                    newValues.add(listOfValue);
 
-                    for(Object object: listOfValue){
+                }else{
+                    if(value instanceof  State){
+                        newValues.add(value);
 
+                    }else{
+                        State state1 = new State();
+                        state1.setName("X"+Integer.toString(i++));
+                        state1.addObject(value);
+                        newValues.add(state1);
+                        newStates.add(state1);
                     }
                 }
             }
 
+            for(State state2 : newStates){
+                if(state2.getName().equals(state.getName())){
+                    state2.setValues(newValues);
+                }
+            }
         }
 
+
+        for(State state1 : newStates){
+             ArrayList<Object> objectArrayList = state1.getValues();
+             ArrayList<Object> newValues = new ArrayList<>();
+
+             for(Object object:objectArrayList){
+
+                 if(object instanceof ArrayList){
+
+                     ArrayList<Object> objectArrayList1 = (ArrayList<Object>) object;
+                     ArrayList<Object> newArrayList = new ArrayList<>();
+
+                     for(Object object1:objectArrayList1){
+
+                         if(object1 instanceof  String){
+
+                             for(State state11: newStates){
+                                 ArrayList<Object> valuesOfState = state11.getValues();
+
+                                 if(valuesOfState.size() == 1){
+                                     Object object5 = valuesOfState.get(0);
+                                     if(object5 instanceof  String){
+                                         if(object5.equals(object1)){
+                                                newArrayList.add(state11);
+                                         }
+                                     }
+                                 }
+
+                             }
+
+
+                         }else{
+
+                             newArrayList.add(object1);
+                         }
+                     }
+
+                     newValues.add(newArrayList);
+
+                 }else{
+                     newValues.add(object);
+                 }
+             }
+
+             state1.setValues(newValues);
+        }
+
+        Set<State> finalStates = new HashSet<>();
+
+        int j=1;
+
+        int k = newStates.size();
+
+        for(int t=0; t<k; t++){
+
+
+            for(State state : newStates){
+
+                State newState =  new State();
+                newState.setName(state.getName());
+
+                ArrayList<Object> values = state.getValues();
+                ArrayList<Object> newValues = new ArrayList<>();
+
+                for(Object value : values){
+
+                    if(value instanceof  ArrayList){
+
+                        ArrayList<Object> arrayValue = (ArrayList<Object>) value;
+
+
+                        if(arrayValue.size()>2){
+
+                            ArrayList<Object> newArray = new ArrayList<>();
+                            newArray.add(arrayValue.get(0));
+
+                            State newState2 = new State();
+                            newState2.setName("Y"+Integer.toString(j++));
+
+                            ArrayList<Object> lastArray = new ArrayList<Object>();
+
+                            for(int g=1; g<3; g++){
+                                lastArray.add(arrayValue.get(g));
+                            }
+
+                            newState2.addObject(lastArray);
+
+                            finalStates.add(newState2);
+                            newArray.add(newState2);
+                            newValues.add(newArray);
+
+                        }else{
+                            newValues.add(value);
+                        }
+
+                    }else{
+                        newValues.add(value);
+                    }
+                }
+
+                newState.setValues(newValues);
+                finalStates.add(newState);
+
+
+            }
+
+
+            newStates = new HashSet<>();
+
+            for(State state1: finalStates){
+
+                State newState = new State();
+                newState.setName(state1.getName());
+                ArrayList<Object> values = state1.getValues();
+                ArrayList<Object> newValues = new ArrayList<>();
+
+                newValues.addAll(values);
+                newState.setValues(newValues);
+
+                newStates.add(newState);
+
+            }
+
+            finalStates = new HashSet<>();
+
+
+        }
+
+        resulOfUselesSyembols.setStates(newStates);
 
         return resulOfUselesSyembols;
     }

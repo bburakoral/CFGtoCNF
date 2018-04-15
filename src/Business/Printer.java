@@ -13,6 +13,7 @@ public class Printer {
 
         Set<State> states = contextFreeGrammar.getStates();
 
+
         Iterator<State> stateIterator = states.iterator();
         while (stateIterator.hasNext()) {
             State state = stateIterator.next();

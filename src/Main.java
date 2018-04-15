@@ -13,6 +13,7 @@ public class Main {
         ContextFreeGrammar uselessSymbol = new UselessSymbol().getContextFreeGrammar();
         ContextFreeGrammar unitProduction = new UniteProduction().getContextFreeGrammar();
 
+        /*
 
         System.out.println("Before  Eliminate Epsilon-Production");
         printer.printCFG(epsilonProduction);
@@ -43,12 +44,13 @@ public class Main {
         System.out.println("After Eliminate Useless Symbols");
         printer.printCFG(uselessSymbolResult);
 
+*/
 
         ContextFreeGrammar CFGtoCNF = new CFGtoCNF().getContextFreeGrammar();
 
-        System.out.println("\n");
-        System.out.println("Before Convert CFG to CNF");
-        printer.printCFG(CFGtoCNF);
+       // System.out.println("\n");
+       // System.out.println("Before Convert CFG to CNF");
+       // printer.printCFG(CFGtoCNF);
 
         System.out.println("\n");
         System.out.println("After Convert CFG to CNF");
