@@ -120,6 +120,7 @@ public class UselessSymbol {
     }
 
     public void setContextFreeGrammar(ContextFreeGrammar contextFreeGrammar) {
+        // Test
         this.contextFreeGrammar = contextFreeGrammar;
     }
 }
